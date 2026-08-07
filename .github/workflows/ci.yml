@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - run: sudo apt-get update && sudo apt-get install -y nasm
+      - run: cargo build
+      - run: cargo test
+      - run: cargo clippy --no-deps -- -D warnings
+      - run: cargo build --features lto
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - run: brew install nasm
+      - run: rustup target add x86_64-apple-darwin aarch64-apple-ios
+      - run: cargo build
+      - run: cargo build --target x86_64-apple-darwin
+      - run: cargo build --target aarch64-apple-ios
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install nasm
+        shell: pwsh
+        run: |
+          choco install nasm -y --no-progress
+          echo "C:\Program Files\NASM" >> $env:GITHUB_PATH
+      - run: cargo build

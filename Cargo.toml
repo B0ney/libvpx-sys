@@ -1,0 +1,20 @@
+[package]
+name = "libvpx-sys"
+version = "0.1.0+libvpx-1.16.0"
+edition = "2024"
+license-file = "LICENSE"
+publish = false
+links = "vpx"
+description = "bindings to libvpx"
+repository = "https://github.com/darius-zetier/libvpx-sys"
+rust-version = "1.88"
+
+[lib]
+name = "vpx_sys"
+
+[build-dependencies]
+cc = { version = "1", features = ["parallel"] }
+nasm-rs = { version = "0.3", features = ["parallel"] }
+
+[features]
+lto = []
