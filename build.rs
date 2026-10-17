@@ -52,6 +52,7 @@ fn config_dir_name(target: &str) -> &'static str {
         "x86_64-unknown-linux-gnu" => "x86_64-linux-gcc",
         "aarch64-unknown-linux-gnu" => "arm64-linux-gcc",
         "x86_64-pc-windows-msvc" => "x86_64-win64-vs17",
+        "x86_64-pc-windows-gnu" => "x86_64-win64-gcc",
         "x86_64-apple-darwin" => "x86_64-darwin20-gcc",
         "aarch64-apple-darwin" => "arm64-darwin20-gcc",
         "aarch64-apple-ios" | "aarch64-apple-ios-sim" => "arm64-darwin-gcc",
@@ -59,7 +60,7 @@ fn config_dir_name(target: &str) -> &'static str {
         other => panic!(
             "libvpx-sys has no vendored config for target `{other}`. Supported: \
              x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-pc-windows-msvc, \
-             x86_64-apple-darwin, aarch64-apple-darwin, aarch64-apple-ios, \
+             x86_64-pc-windows-gnu, x86_64-apple-darwin, aarch64-apple-darwin, aarch64-apple-ios, \
              aarch64-apple-ios-sim, x86_64-apple-ios. To add one, see \
              libvpx-sys/generate-configs.sh."
         ),
@@ -117,7 +118,10 @@ fn read_srcs(config_dir: &Path, libvpx_dir: &Path) -> (Vec<PathBuf>, Vec<PathBuf
             c_files.push(libvpx_dir.join(line));
         } else if line.ends_with(".asm") {
             asm_files.push(libvpx_dir.join(line));
-        } else if [".S", ".s", ".cc", ".cpp"].iter().any(|e| line.ends_with(e)) {
+        } else if [".S", ".s", ".cc", ".cpp"]
+            .iter()
+            .any(|e| line.ends_with(e))
+        {
             panic!("libvpx_srcs.txt lists `{line}`, a source kind build.rs does not compile");
         }
     }
@@ -198,7 +202,10 @@ fn compile_c(
     let mut objects = Vec::new();
     for (flags, group_files) in groups {
         let mut build = cc::Build::new();
-        build.include(config_dir).include(libvpx_dir).warnings(false);
+        build
+            .include(config_dir)
+            .include(libvpx_dir)
+            .warnings(false);
         if !is_msvc {
             build.flag("-pthread");
         }

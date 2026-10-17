@@ -15,6 +15,7 @@ targets=(
   x86_64-linux-gcc
   arm64-linux-gcc
   x86_64-win64-vs17
+  x86_64-win64-gcc
   x86_64-darwin20-gcc
   arm64-darwin20-gcc
   arm64-darwin-gcc
