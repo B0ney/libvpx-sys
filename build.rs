@@ -53,6 +53,8 @@ fn config_dir_name(target: &str) -> &'static str {
         "aarch64-unknown-linux-gnu" => "arm64-linux-gcc",
         "x86_64-pc-windows-msvc" => "x86_64-win64-vs17",
         "x86_64-pc-windows-gnu" => "x86_64-win64-gcc",
+        "i686-pc-windows-gnu" => "x86-win32-gcc",
+        "i686-pc-windows-msvc" => "x86-win32-vs17",
         "x86_64-apple-darwin" => "x86_64-darwin20-gcc",
         "aarch64-apple-darwin" => "arm64-darwin20-gcc",
         "aarch64-apple-ios" | "aarch64-apple-ios-sim" => "arm64-darwin-gcc",
