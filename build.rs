@@ -178,7 +178,8 @@ fn simd_flags(stem: &str, is_arm: bool, is_msvc: bool) -> Vec<&'static str> {
     } else if stem.ends_with("_sse2") {
         vec!["-msse2"]
     } else {
-        vec![]
+        // fixes compilation errors with mmintrin.h when compiling to i686-windows
+        vec!["-msse2"]
     }
 }
 
